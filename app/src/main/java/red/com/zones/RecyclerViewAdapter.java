@@ -1,5 +1,6 @@
 package red.com.zones;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -58,6 +59,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(final RecyclerViewAdapter.ViewHolder holder, int position) {
+        Intent intent = new Intent(context, MainActivity.class);
+        final PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
         sharedPreferences = context.getSharedPreferences("loc_data", Context.MODE_PRIVATE);
         holder.textViewTitle.setText(title[position]);
         holder.textViewAddress.setText(address[position]);
@@ -68,6 +71,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 NotificationCompat.Builder builder = (NotificationCompat.Builder)
                         new NotificationCompat.Builder(context)
                         .setSmallIcon(R.drawable.ic_pin_drop_black_24dp)
+                        .setContentIntent(pendingIntent)
                         .setContentTitle("Zones")
                         .setContentText("Location alarm is running.")
                                 .setCategory(NotificationCompat.CATEGORY_SERVICE).setOngoing(true);
