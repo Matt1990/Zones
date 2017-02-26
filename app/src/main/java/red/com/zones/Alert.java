@@ -1,6 +1,8 @@
 package red.com.zones;
 
+import android.app.NotificationManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -22,10 +24,12 @@ public class Alert extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     MediaPlayer mediaPlayer;
     AudioManager audioManager;
+    NotificationManager notificationManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alert);
+        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         imageButton = (ImageButton) findViewById(R.id.imageButtonDismiss);
         textViewTitle = (TextView) findViewById(R.id.textViewTitle);
         textViewAddress = (TextView) findViewById(R.id.textViewAddress);
@@ -47,7 +51,11 @@ public class Alert extends AppCompatActivity {
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Integer id;
+                sharedPreferences = getSharedPreferences("loc_data", MODE_PRIVATE);
+                id = Integer.valueOf(sharedPreferences.getString("id", ""));
                 mediaPlayer.stop();
+                notificationManager.cancel(id);
                 finish();
                 System.exit(0);
             }

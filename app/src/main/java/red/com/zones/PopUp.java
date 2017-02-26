@@ -29,11 +29,13 @@ public class PopUp extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.popup);
+        sharedPreferences = getSharedPreferences("loc_data", MODE_PRIVATE);
         editTextTitle = (EditText) findViewById(R.id.editTextTitle);
         textViewOk = (TextView) findViewById(R.id.textViewOk);
         textViewCancel = (TextView) findViewById(R.id.textViewCalcel);
         textViewAddress = (TextView) findViewById(R.id.textViewAddress);
         textViewradius = (TextView) findViewById(R.id.textViewRadiusValue);
+        editTextTitle.setText(sharedPreferences.getString("title", "NA"));
         textViewCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -43,12 +45,16 @@ public class PopUp extends Activity {
         textViewOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sharedPreferences = getSharedPreferences("loc_data", MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("title", editTextTitle.getText().toString());
-                editor.apply();
-                finish();
-                startActivity(new Intent(PopUp.this, MainActivity.class));
+                if ((editTextTitle.getText().toString().matches("")))
+                    editTextTitle.setError("Required");
+                if (!(editTextTitle.getText().toString().matches(""))){
+                    sharedPreferences = getSharedPreferences("loc_data", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("title", editTextTitle.getText().toString());
+                    editor.apply();
+                    finish();
+                    startActivity(new Intent(PopUp.this, MainActivity.class));
+                }
             }
         });
         displayMetrics = new DisplayMetrics();

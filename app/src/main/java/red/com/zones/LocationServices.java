@@ -10,6 +10,8 @@ import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -34,6 +36,7 @@ public class LocationServices extends Service implements GoogleApiClient.Connect
     SharedPreferences sharedPreferences;
     Location locationlast;
     Location locationtarget;
+    Double radius;
 
     public IBinder onBind(Intent intent) {
         return null;
@@ -70,6 +73,7 @@ public class LocationServices extends Service implements GoogleApiClient.Connect
         googleApiClient.connect();
         sharedPreferences = getSharedPreferences("loc_data", MODE_PRIVATE);
         locationtarget = new Location("");
+        radius = Double.valueOf(sharedPreferences.getString("rad", ""));
         locationtarget.setLatitude(Double.parseDouble(sharedPreferences.getString("lat", "")));
         locationtarget.setLongitude(Double.parseDouble(sharedPreferences.getString("lng", "")));
     }
@@ -111,11 +115,12 @@ public class LocationServices extends Service implements GoogleApiClient.Connect
         locationlast = location;
         float distance;
         distance = locationlast.distanceTo(locationtarget);
-        if (distance < 500f){
+        if (distance < radius ){
             Intent intent = new Intent(this, Alert.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             stopService(new Intent(this, LocationServices.class));
             startActivity(intent);
+            Log.e("Radius", radius.toString());
         }
     }
 }

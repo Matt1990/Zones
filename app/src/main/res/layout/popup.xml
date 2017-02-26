@@ -14,6 +14,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/editTextTitle"
         android:hint="Title"
+        android:maxLength="15"
+        android:singleLine="true"
+        android:imeOptions="actionDone"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:layout_toStartOf="@+id/textViewRadiusValue" />
